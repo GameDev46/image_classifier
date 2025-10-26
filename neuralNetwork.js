@@ -1,23 +1,3 @@
-/*
-
- _____                         ______                 ___   ____ 
-|  __ \                        |  _  \               /   | / ___|
-| |  \/  __ _  _ __ ___    ___ | | | |  ___ __   __ / /| |/ /___ 
-| | __  / _` || '_ ` _ \  / _ \| | | | / _ \\ \ / // /_| || ___ \
-| |_\ \| (_| || | | | | ||  __/| |/ / |  __/ \ V / \___  || \_/ |
- \____/ \__,_||_| |_| |_| \___||___/   \___|  \_/      |_/\_____/
-
-
-*/
-
-/* 
-	AUTHOR: GameDev46
-
-	Youtube: https://www.youtube.com/@gamedev46
-	Github: https://github.com/GameDev46
-*/
-
-
 class NeuralNetwork {
 	layers = [];
 	weights = [];
@@ -95,9 +75,7 @@ class NeuralNetwork {
 		}
 
 		this.learningRate = options.learningRate || 0.2;
-
 		this.neuralLayers = layers;
-
 		this.decimalPlaces = options.decimalPlaces || 5;
 
 		this.layers = new Array(layers.length + 2).fill(0);
@@ -110,11 +88,9 @@ class NeuralNetwork {
 		}
 
 		this.layers[this.layers.length - 1] = new Array(outputs).fill(0);
-
 		this.activationFunction = new Array(layers.length + 2).fill(this.sigmoid);
 
 		for (let a = 0; a < options.activation.length; a++) {
-
 			if (options.activation[a].toLowerCase() == "tanh") {
 				this.activationFunction[a] = this.tanh;
 			}
@@ -130,7 +106,6 @@ class NeuralNetwork {
 			if (options.activation[a].toLowerCase() == "sin") {
 				this.activationFunction[a] = this.sin;
 			}
-
 		}
 
 		this.setupWeights();
@@ -140,16 +115,11 @@ class NeuralNetwork {
 	predict(value) {
 
 		let data = {};
-
 		if (this.type == "imageClassification") {
-
 			data.inputs = this.filterImage(value);
-
 		}
 		else {
-
 			data.inputs = value;
-
 		}
 
 		let count = Math.min(data.inputs.length, this.layers[0].length);
@@ -159,7 +129,6 @@ class NeuralNetwork {
 		}
 
 		this.calculateOutputs();
-
 		return this.layers[this.layers.length - 1];
 	}
 
@@ -168,80 +137,63 @@ class NeuralNetwork {
 	}
 
 	setupWeights() {
-
 		// Weight is read where first level is layer, second level is node and third level is previous nodes
-
 		let weights = [];
 
 		// Setup layer weights
 		for (let x = 1; x < this.layers.length; x++) {
 
 			let weightsToAdd = [];
-
 			for (let y = 0; y < this.layers[x].length; y++) {
 
 				let nodeWeightData = [];
-
 				for (let i = 0; i < this.layers[x - 1].length; i++) {
-
 					nodeWeightData.push(this.round((Math.random() * 2) - 1));
-
 				}
 
 				weightsToAdd.push(nodeWeightData);
-
 			}
 
 			weights.push(weightsToAdd);
-
 		}
 
 		this.weights = weights;
-
 	}
 
 	setupBiases() {
 
 		this.biases = [];
-
 		for (let x = 1; x < this.layers.length; x++) {
 
 			let biasData = [];
-
 			for (let y = 0; y < this.layers[x].length; y++) {
 				biasData.push(this.round((Math.random() * 2) - 1));
 			}
 
 			this.biases.push(biasData)
 		}
-
 	}
 
 	calculateOutputs() {
 
 		for (let x = 1; x < this.layers.length; x++) {
-
 			for (let y = 0; y < this.layers[x].length; y++) {
 
 				let data = this.layers[x - 1];
-
+				
 				this.layers[x][y] = 0;
-
 				for (let i = 0; i < data.length; i++) {
 					this.layers[x][y] += this.round(data[i] * this.weights[x - 1][y][i]);
 				}
 
 				// Activation function
-
 				this.layers[x][y] = this.round(this.activationFunction[x - 1](this.layers[x][y] + this.biases[x - 1][y], false));
-
 			}
 		}
 
 	}
 
 	// Convolutional layers
-
 	pixelIndex(x, y, width) {
 		return x + (y * width);
 	}
@@ -254,23 +206,16 @@ class NeuralNetwork {
 			for (let y = 0; y < height; y++) {
 
 				let sumAlpha = 0;
-
 				for (let i = -1; i <= 1; i++) {
 					for (let j = -1; j <= 1; j++) {
-
 						let factor = filter[i + 1][j + 1];
-
 						sumAlpha += (img[this.pixelIndex(x + i, y + j, width)] || img[this.pixelIndex(x, y, width)]) * factor;
-
 					}
 				}
 
 				//convImg[pixelIndex(x, y)] = (sumAlpha * 0.5) + 0.5;
-
 				convImg[this.pixelIndex(x, y, width)] = this.leakyRelU(sumAlpha);
-
 			}
-
 		}
 
 		return convImg;
@@ -279,24 +224,18 @@ class NeuralNetwork {
 	maxPool(img, stride, width, height) {
 
 		let pooledImage = [];
-
 		for (let y = 0; y < height; y += stride) {
 			for (let x = 0; x < width; x += stride) {
 
 				let brightAlpha = -Infinity;
-
 				for (let i = 0; i < stride; i++) {
 					for (let j = 0; j < stride; j++) {
-
 						brightAlpha = Math.max(brightAlpha, img[this.pixelIndex(x + i, y + j, width)]);
-
 					}
 				}
-
+				
 				pooledImage.push(brightAlpha);
-
 			}
-
 		}
 
 		return pooledImage;
@@ -308,154 +247,103 @@ class NeuralNetwork {
 
 		let width = data.width;
 		let height = data.height;
-
 		let img = data.image;
 
 		let startImg = [];
-
 		for (let x = 0; x < img.length; x += 4) {
-
 			let grayscale = (img[x] + img[x + 1] + img[x + 2]) / (255 * 4);
-
 			startImg.push(grayscale);
-
 		}
 
 		// Apply convolutional layers with different filters and then max pool output
-
 		let filteredImages = [];
-
 		let stride = 2;
 
 		for (let i = 0; i < this.layer1filters.length; i++) {
-
 			let convImg = this.convolutionLayer(startImg, this.layer1filters[i], width, height);
 			let pooledImg = this.maxPool(convImg, stride, width, height);
-
 			filteredImages.push(pooledImg);
-
 		}
 
 		width *= 0.5;
 		height *= 0.5;
 
 		// Apply convolutional layers with different filters and then max pool output again
-
 		let secondFilteredImages = [];
-
 		stride = 2;
 
 		for (let i = 0; i < filteredImages.length; i++) {
-
 			// Apply a convolution with a different filter on the same image
-
 			let currentImg = filteredImages[i];
 
 			for (let x = 0; x < this.layer2filters.length; x++) {
-
 				let convImg = this.convolutionLayer(currentImg, this.layer2filters[x], width, height);
 				let pooledImg = this.maxPool(convImg, stride, width, height);
-
 				secondFilteredImages.push(pooledImg);
-
 			}
-
 		}
 
 		let flattenedImage = [];
-
 		for (let i = 0; i < secondFilteredImages.length; i++) {
-
 			for (let x = 0; x < secondFilteredImages[i].length; x++) {
-
 				flattenedImage.push(secondFilteredImages[i][x]);
-
 			}
-
 		}
 
 		width *= 0.5;
 		height *= 0.5;
 
 		return flattenedImage;
-
 	}
 
 	// Activation function setup
-
 	setActivationFunction(types) {
-
 		if (this.type == "imageClassification") {
-
 			console.warn("When using 'imageClassification' mode I reccomend using the 'sigmoid' activation function as currently it yields the best results");
-
 			return;
 		}
 
 		for (let i = 0; i < Math.min(types.length, this.activationFunction.length); i++) {
-
 			this.activationFunction[i] = types[i];
-
 		}
-
 	}
 
 	// Activation functions
-
+	
 	// reLU
-
 	relU(num, isDerivative) {
-
 		if (!isDerivative) {
 			return Math.max(0, num);
 		}
 		else {
-
-			if (num > 0) {
-				return 1;
-			}
-
+			if (num > 0) return 1;
 			return 0;
 		}
-
 	}
 
-	// leaky relu
-
+	// Leaky relu
 	leakyRelU(num, isDerivative) {
-
 		if (!isDerivative) {
 			return Math.max(0.1 * num, num);
 		}
 		else {
-
-			if (num > 0) {
-				return 1;
-			}
-
+			if (num > 0) return 1;
 			return 0.1;
-
 		}
-
 	}
 
 	// Sigmoid
-
 	sigmoid(num, isDerivative) {
-
 		if (!isDerivative) {
 			return 1 / (1 + Math.exp(-num));
 		}
 		else {
 			return (1 / (1 + Math.exp(-num))) * (1 - (1 / (1 + Math.exp(-num))));
 		}
-
 	}
 
 	// Hyperbolic tangent
-
 	tanh(num, isDerivative) {
-
 		if (!isDerivative) {
 			return Math.tanh(num);
 		}
@@ -465,149 +353,101 @@ class NeuralNetwork {
 	}
 
 	// Sin
-
 	sin(num, isDerivative) {
-
 		if (!isDerivative) {
 			return Math.sin(num);
 		}
 		else {
 			return Math.cos(num);
 		}
-
 	}
 
 	calculateDerivative(num) {
-
 		// Use the chain rule to calculate the derivative of a graph
-
 		let deriv = 1;
 
 		for (let x = 0; x < this.activationFunction.length; x++) {
-
+			
 			let outputNum = num;
-
 			for (let y = this.activationFunction.length - 1; y > x; y--) {
-
 				let isDerivative = y == (x + 1);
-
 				outputNum = this.activationFunction[y](outputNum, isDerivative);
-
 			}
 
 			deriv *= outputNum;
-
 		}
 
 		return deriv;
-
 	}
 
 	// Calculate derivative
 
 	// Round number to a specified amount of decimal places
-
 	round(num) {
 		let multi = 10 ^ this.decimalPlaces;
-
 		return Math.round(num * multi) / multi;
 	}
 
 	merge(mergeNeuron) {
-
 		// Average together the weights of this neural network and another
-
 		for (let x = 0; x < Math.min(mergeNeuron.weights.length, this.weights.length); x++) {
-
 			for (let y = 0; y < Math.min(mergeNeuron.weights[x].length, this.weights[x].length); y++) {
-
 				for (let i = 0; i < Math.min(mergeNeuron.weights[x][y].length, this.weights[x][y].length); i++) {
-
 					// Merge weights
 					let opts = [this.weights[x][y][i], mergeNeuron.weights[x][y][i]];
 					this.weights[x][y][i] = (opts[0] + opts[1]) / 2;
-
 				}
-
 			}
-
 		}
 
 		for (let x = 0; x < Math.min(mergeNeuron.biases.length, this.biases.length); x++) {
-
 			for (let y = 0; y < Math.min(mergeNeuron.biases[x].length, this.biases[x].length); y++) {
 				let opts = [this.biases[x][y], mergeNeuron.biases[x][y]]
 				this.biases[x][y] = (opts[0] + opts[1]) / 2;
 			}
-
 		}
-
 	}
 
 	mutate(mutationChance, mutationIntensity) {
 
 		// Randomly change the weights in the neural network
-
 		for (let x = 0; x < this.weights.length; x++) {
-
 			for (let y = 0; y < this.weights[x].length; y++) {
-
 				for (let i = 0; i < this.weights[x][y].length; i++) {
-
 					if (Math.random() * 100 < mutationChance) {
 						// Mutate weight
 						this.weights[x][y][i] += (Math.random() * mutationIntensity * 2) - mutationIntensity;
-
 					}
-
 				}
-
 			}
-
 		}
 	}
 
 	copy(mergeNeuron) {
-
 		// Replicate the inputted neuron ( mergeNeuron )
-
 		for (let x = 0; x < Math.min(mergeNeuron.weights.length, this.weights.length); x++) {
-
 			for (let y = 0; y < Math.min(mergeNeuron.weights[x].length, this.weights[x].length); y++) {
-
 				for (let i = 0; i < Math.min(mergeNeuron.weights[x][y].length, this.weights[x][y].length); i++) {
-
 					// Replace weights
 					this.weights[x][y][i] = mergeNeuron.weights[x][y][i];
-
 				}
-
 			}
-
 		}
 
 		for (let x = 0; x < Math.min(mergeNeuron.biases.length, this.biases.length); x++) {
-
 			for (let y = 0; y < Math.min(mergeNeuron.biases[x].length, this.biases[x].length); y++) {
-
 				this.biases[x][y] = mergeNeuron.biases[x][y];
-
 			}
-
 		}
-
 	}
 
 	train(networkInputs, expectedOutputs) {
-
 		// Setup output errors
-
 		let currentOutputs = this.predict(networkInputs);
-
 		if (currentOutputs.length != expectedOutputs.length) console.warn("The target outputs must be the dame length as the networks outputs (" + currentOutputs.length + ")");
 
 		let error = [];
-
+		
 		// Calculate the intial output errors ( TARGET - OUTPUT )
 		for (let i = 0; i < Math.min(currentOutputs.length, expectedOutputs.length); i++) {
 			error.push(expectedOutputs[i] - currentOutputs[i]);
@@ -616,9 +456,7 @@ class NeuralNetwork {
 		for (let x = (this.layers.length - 1); x > 0; x--) {
 
 			let nextNodeErrors = [];
-
 			for (let y = 0; y < this.layers[x].length; y++) {
-
 				/*let summedWeights = 0;
 
 				for (let i = 0; i < this.layers[x - 1].length; i++) {
@@ -631,14 +469,11 @@ class NeuralNetwork {
 				// Calculate error of the node
 
 				let nodeError = 0;
-
 				if (x + 1 < this.layers.length) {
-
 					// Sum all previous errors multiplied with the weights
 					for (let n = 0; n < this.layers[x + 1].length; n++) {
 
 						let forwardLayerTotalWeight = 0;
-
 						for (let o = 0; o < this.layers[x].length; o++) {
 							// Calculate the total weight going out of the neuron
 							forwardLayerTotalWeight += this.weights[x][n][o];
@@ -646,12 +481,9 @@ class NeuralNetwork {
 
 						nodeError += error[n] * (this.weights[x][n][y] / forwardLayerTotalWeight);
 					}
-
 				}
 				else {
-
 					nodeError = error[y];
-
 				}
 
 				// Save layers neuron errors ready to be used for the next layer
@@ -678,13 +510,10 @@ class NeuralNetwork {
 
 					// Old weight change (Doesn't use gradient descent + might not work)
 					//this.weights[x - 1][y][i] += (this.weights[x - 1][y][i] / summedWeights) * nodeError;
-
 				}
-
 			}
 
 			error = nextNodeErrors;
-
 		}
 
 	}
