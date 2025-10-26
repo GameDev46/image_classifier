@@ -1,22 +1,3 @@
-/*
-
- _____                         ______                 ___   ____ 
-|  __ \                        |  _  \               /   | / ___|
-| |  \/  __ _  _ __ ___    ___ | | | |  ___ __   __ / /| |/ /___ 
-| | __  / _` || '_ ` _ \  / _ \| | | | / _ \\ \ / // /_| || ___ \
-| |_\ \| (_| || | | | | ||  __/| |/ / |  __/ \ V / \___  || \_/ |
- \____/ \__,_||_| |_| |_| \___||___/   \___|  \_/      |_/\_____/
-
-
-*/
-
-/* 
-	AUTHOR: GameDev46
-
-	Youtube: https://www.youtube.com/@gamedev46
-	Github: https://github.com/GameDev46
-*/
-
 import { NeuralNetwork } from "./neuralNetwork.js";
 
 let width = 60;
@@ -43,11 +24,8 @@ let net = new NeuralNetwork(presets);
 // Listen for when network activation is changed
 
 document.getElementById("activationSelect").addEventListener("change", e => {
-
 	let activation = document.getElementById("activationSelect").value;
-
 	startNetPresets.activation = [activation];
-
 	presets.activation = [activation]
 
 	/*if (activation == "tanh" || activation == "leakyrelu") {
@@ -59,13 +37,10 @@ document.getElementById("activationSelect").addEventListener("change", e => {
 	}*/
 
 	net = new NeuralNetwork(presets);
-
 	updateStartNet();
-
 })
 
 // Load and copy the starting weights and biases of ther network
-
 let startModel = "";
 
 let startNetPresets = {};
@@ -102,14 +77,12 @@ fetch("/startNetwork.json")
 	})
 
 function updateStartNet() {
-
 	startNet = new NeuralNetwork(startNetPresets);
 
 	startNet.weights = startModel.weights;
 	startNet.biases = startModel.biases;
 
 	net.copy(startNet);
-
 }
 
 /*console.log(net.predict([1]));
@@ -128,9 +101,7 @@ document.getElementById("resetNet").addEventListener("click", e => {
 	if (confirm("Would you like to reset the network?")) {
 
 		// Reset network
-
 		net = new NeuralNetwork(presets);
-
 		net.copy(startNet);
 
 		addToConsole("");
@@ -138,26 +109,20 @@ document.getElementById("resetNet").addEventListener("click", e => {
 		addToConsole("Network Reset");
 		addToConsole("+-+-+-+-+-+-+-+-+-+-+");
 		addToConsole("");
-
 	}
-
 })
 
 document.getElementById("learningRate").addEventListener("change", e => {
-
 	net.learningRate = Number(document.getElementById("learningRate").value);
-
 })
 
 // Dark and light modes
-
 let viewMode = "dark";
 
 function changeMode(newMode) {
 	viewMode = newMode;
 
 	if (viewMode == "light") {
-
 		document.getElementById("toggleMode").innerHTML = '<i data-feather="sun"></i>';
 
 		document.body.style.background = "rgb(240, 240, 240)";
@@ -166,10 +131,8 @@ function changeMode(newMode) {
 		document.body.style.setProperty("--complimentColour", "rgb(240, 240, 240)");
 		document.body.style.setProperty("--fontColour", "rgb(13, 13, 13)");
 		document.body.style.setProperty("--buttonColour", "rgba(200, 200, 230, 1.0)");
-
 	}
 	else {
-
 		document.getElementById("toggleMode").innerHTML = '<i data-feather="moon"></i>';
 
 		document.body.style.background = "#0B0C23";
@@ -178,7 +141,6 @@ function changeMode(newMode) {
 		document.body.style.setProperty("--complimentColour", "#261348");
 		document.body.style.setProperty("--fontColour", "rgb(255, 255, 255)");
 		document.body.style.setProperty("--buttonColour", "rgba(120, 120, 170, 1.0)");
-
 	}
 
 	feather.replace();
@@ -187,14 +149,12 @@ function changeMode(newMode) {
 changeMode("dark");
 
 document.getElementById("toggleMode").addEventListener("click", e => {
-
 	if (viewMode == "dark") {
 		changeMode("light");
 	}
 	else {
 		changeMode("dark");
 	}
-
 })
 
 // Access camera
@@ -203,30 +163,24 @@ document.getElementById("toggleMode").addEventListener("click", e => {
 let facingMode = "user";
 
 document.getElementById("flipCamera").addEventListener("click", e => {
-
 	if (facingMode == "user") {
 		facingMode = "environment";
-
 		document.body.style.setProperty("--mirrorAngle", "0deg");
 	}
 	else {
 		facingMode = "user";
-
 		document.body.style.setProperty("--mirrorAngle", "180deg");
 	}
 
 	toggleCamera();
-
 })
 
 let isPaused = false;
 
 document.getElementById("pausePlay").addEventListener("click", e => {
-
 	isPaused = !isPaused;
 
 	if (isPaused) {
-
 		document.getElementById("cameraVideo").pause();
 		document.getElementById("pausePlay").innerHTML = '<i data-feather="play"></i>';
 	}
@@ -237,13 +191,10 @@ document.getElementById("pausePlay").addEventListener("click", e => {
 	}
 
 	feather.replace();
-
 })
 
 function toggleCamera() {
-
 	let video = document.getElementById("cameraVideo");
-
 	let videoDisplay = document.getElementById("cameraVideo2");
 
 	video.setAttribute('playsinline', '');
@@ -266,7 +217,6 @@ function toggleCamera() {
 		video.srcObject = stream;
 		videoDisplay.srcObject = stream;
 	});
-
 }
 
 function takePicture(cameraID) {
@@ -294,9 +244,7 @@ function takePicture(cameraID) {
 		capture = ctx.getImageData(0, 0, width, height);
 
 		dataURL = canvas.toDataURL()
-
 	} else {
-
 		ctx.fillStyle = "#AAA";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -313,9 +261,8 @@ function takePicture(cameraID) {
 	};
 
 	if (!isPaused) video.play();
-
 	if (cameraID == 2) video.play();
-
+	
 	if (!isTraining && cameraID == 2) updateFilterCanvas(net.filterImage(cap), width / 4, height / 4);
 
 	return cap;
@@ -331,19 +278,16 @@ function updateFilterCanvas(capture, width, height) {
 	canvas.height = pixelSize * height * 3;
 
 	// Filter image
-
 	let outputImage = capture;
 
 	let offsetX = 2.3 / (pixelSize / 6);
 	let offsetY = 0.5 / (pixelSize / 6);
 
 	for (let i = 0; i < 10; i++) {
-
 		for (let x = 0; x < width; x++) {
 			for (let y = 0; y < height; y++) {
 
 				let colourPos = x + ((y + (i * height)) * width);
-
 				let alpha = outputImage[colourPos] * 255;
 
 				/*if (presets.activation[0] == "tanh" || presets.activation[0] == "leakyrelu" || presets.activation[0] == "sin") {
@@ -354,10 +298,8 @@ function updateFilterCanvas(capture, width, height) {
 
 				ctx.fillStyle = "rgb(" + alpha + "," + alpha + "," + alpha + ")";
 				ctx.fillRect((x + ((i % 3) * width) + ((i % 3) * offsetX)) * pixelSize, (y + (heightAddition * height) + (heightAddition * offsetY)) * pixelSize, pixelSize, pixelSize);
-
 			}
 		}
-
 	}
 
 }
@@ -381,17 +323,13 @@ document.getElementById("addClass").addEventListener("click", e => {
 	imageCounts.push(0);
 
 	// Reset the network to have more outputs
-
 	presets.outputs = classCount + 1;
-
 	net = new NeuralNetwork(presets);
-
 	if (startNet != null) net.copy(startNet);
 
 	net.learningRate = Number(document.getElementById("learningRate").value);
 
 	// Update the class editor
-
 	let classHolder = document.getElementById("classHolder");
 
 	let div = document.createElement("div");
@@ -423,9 +361,7 @@ document.getElementById("addClass").addEventListener("click", e => {
 	openCamBut.classID = (classCount + 1);
 
 	openCamBut.addEventListener("click", e => {
-
 		toggleVideoMenu(e, Number(e.target.classID));
-
 	})
 
 	inlineDiv.appendChild(openCamBut);
@@ -443,11 +379,8 @@ document.getElementById("addClass").addEventListener("click", e => {
 	uploadFolder.classID = (classCount + 1);
 
 	uploadFolder.addEventListener("change", e => {
-
 		const selectedFolder = e.target.files;
-
 		processFolder(selectedFolder, e.target.classID)
-
 	})
 
 	customLabel.appendChild(uploadFolder)
@@ -464,7 +397,6 @@ document.getElementById("addClass").addEventListener("click", e => {
 	classHolder.appendChild(div);
 
 	// Update guess display
-
 	let guessHolder = document.getElementById("resultHolder");
 
 	div = document.createElement("div");
@@ -495,29 +427,21 @@ document.getElementById("addClass").addEventListener("click", e => {
 	});
 
 	feather.replace();
-
 	classCount += 1;
-
 })
 
 document.getElementById("openCamera1").addEventListener("click", e => {
-
-	toggleVideoMenu(e, 1)
-
+	toggleVideoMenu(e, 1);
 })
 
 document.getElementById("openCamera2").addEventListener("click", e => {
-
-	toggleVideoMenu(e, 2)
-
+	toggleVideoMenu(e, 2);
 })
 
 function toggleVideoMenu(e, classID) {
 
 	if (currentClass == classID && videoHolderOpen) {
-
 		videoHolderOpen = false;
-
 		toggleAutoShoot(false);
 
 		document.getElementById("videoHolder").style.transform = "scaleY(0)";
@@ -528,10 +452,8 @@ function toggleVideoMenu(e, classID) {
 
 		e.target.style.background = "rgb(150, 150, 240)";
 		e.target.innerHTML = '<i data-feather="plus-square"></i>';
-
 	}
 	else {
-
 		currentClass = classID;
 		videoHolderOpen = true;
 
@@ -542,39 +464,28 @@ function toggleVideoMenu(e, classID) {
 		document.getElementById("videoHolder").style.transform = "scaleY(1)";
 		document.getElementById("videoHolder").style["-webkit-transform"] = "scaleY(1)";
 		document.getElementById("videoHolder").style["-moz-transform"] = "scaleY(1)";
-
 		document.getElementById("videoHolder").style.pointerEvents = "all";
-
 
 		for (let i = 1; i < classCount + 1; i++) {
 			document.getElementById("openCamera" + i).style.background = "rgb(150, 150, 240)";
 			document.getElementById("openCamera" + i).innerHTML = '<i data-feather="plus-square"></i>';
-
 		}
 
 		e.target.style.background = "rgb(240, 150, 150)";
 		e.target.innerHTML = '<i data-feather="x-square"></i>';
-
 	}
 
 	feather.replace();
-
 }
 
 document.getElementById("uploadFolder1").addEventListener("change", e => {
-
 	const selectedFolder = e.target.files;
-
 	processFolder(selectedFolder, 1)
-
 })
 
 document.getElementById("uploadFolder2").addEventListener("change", e => {
-
 	const selectedFolder = e.target.files;
-
 	processFolder(selectedFolder, 2)
-
 })
 
 let loadedImages = [];
@@ -596,9 +507,7 @@ function createImageFromUpload(image) {
 		capture = ctx.getImageData(0, 0, width, height);
 
 		dataURL = canvas.toDataURL()
-
 	} else {
-
 		ctx.fillStyle = "#AAA";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -620,31 +529,26 @@ function createImageFromUpload(image) {
 function processFolder(folder, classID) {
 
 	for (let i = 0; i < folder.length; i++) {
-
 		let imgURL = URL.createObjectURL(folder[i]);
 
 		loadedImages[i] = {};
-
+		
 		loadedImages[i].id = classID;
 		loadedImages[i].image = new Image;
-
 		loadedImages[i].image.onload = function() {
 
 			let cap = createImageFromUpload(loadedImages[i].image);
-
 			cap.id = classID - 1;
 
 			imageCounts[classID - 1] += 1;
 			totalImageCount += 1;
 
 			document.getElementById("imagesUsed").innerText = trainingIndex + " / " + totalImageCount;
-
 			document.getElementById("imageCount" + classID).innerText = imageCounts[classID - 1] + " images";
 
 			trainingImages.push(cap);
 
 			// Add image to display
-
 			let displayImg = new Image();
 			displayImg.src = imgURL;
 
@@ -653,52 +557,39 @@ function processFolder(folder, classID) {
 			}
 
 			document.getElementById("imageDisplay" + classID).appendChild(displayImg);
-
 		}
 
 		loadedImages[i].image.src = imgURL;
-
 		//URL.revokeObjectURL(imgURL)
-
 	}
 
 }
 
 function autoScrollImageDisplay(t) {
-
 	for (let i = 1; i <= classCount; i++) {
-
 		let div = document.getElementById("imageDisplay" + i)
-
 		document.getElementById("imageDisplay" + i).scrollTo((t / 40) % div.scrollWidth, 0)
-
 	}
-
 }
 
 document.getElementById("captureButton").addEventListener("click", e => {
-
 	takeAndProcessImage();
-
 })
 
 function takeAndProcessImage() {
 
 	let cap = takePicture();
-
 	cap.id = currentClass - 1;
 
 	imageCounts[currentClass - 1] += 1;
 	totalImageCount += 1;
 
 	document.getElementById("imagesUsed").innerText = trainingIndex + " / " + totalImageCount;
-
 	document.getElementById("imageCount" + currentClass).innerText = imageCounts[currentClass - 1] + " images";
 
 	trainingImages.push(cap);
 
 	//let imgURL = URL.createObjectURL(cap.dataURL);
-
 	let displayImg = new Image();
 	//displayImg.src = imgURL;
 	displayImg.src = cap.dataURL
@@ -708,23 +599,16 @@ function takeAndProcessImage() {
 	}
 
 	document.getElementById("imageDisplay" + currentClass).appendChild(displayImg);
-
 }
 
 document.getElementById("trainButton").addEventListener("click", e => {
 
 	for (let i = 1; i <= classCount; i++) {
-
 		if (imageCounts[i - 1] <= 0) {
-
 			let className = document.getElementById("type" + i).value;
-
 			addWarningText("Unable To Train", "The '" + className + "' class must have at least 1 image to train the network properly!");
-
 			return;
-
 		}
-
 	}
 
 	document.getElementById("trainButton").innerText = "Training";
@@ -737,7 +621,6 @@ document.getElementById("trainButton").addEventListener("click", e => {
 	addToConsole("Training...")
 
 	trainNetwork();
-
 })
 
 let trainingIndex = 0;
@@ -747,7 +630,6 @@ let successfulAttempts = 0;
 let totalAttempts = 0;
 
 function trainNetwork() {
-
 	successfulAttempts = 0;
 	totalAttempts = 0;
 
@@ -757,44 +639,35 @@ function trainNetwork() {
 	isTraining = true;
 
 	addWarningText("Please Don't Switch Tabs!", "All training is done client side so by switching tabs training is forced to be paused. You can instead open a new window if you wish to continue browsing")
-
 }
 
 function checkToTrain() {
 
 	if (isTraining) {
-
+		
 		for (let i = trainingIndex; i < trainingImages.length; i++) {
-
 			if (i - trainingIndex >= 1) {
 				// Break from loop and save data for next frame
 				trainingIndex = i;
 				document.getElementById("trainingProgress").value = (trainingIndex / trainingImages.length) * 100;
-
 				document.getElementById("imagesUsed").innerText = trainingIndex + " / " + totalImageCount;
 
 				// Show training image on canvas
-
 				let img = trainingImages[i];
 				updateFilterCanvas(net.filterImage(img), width / 4, height / 4);
-
 				return;
 			}
 
 			let inputImageData = trainingImages[i];
 
 			if (presets.activation[0] == "tanh" || presets.activation[0] == "leakyrelu" || presets.activation[0] == "sin") {
-
 				// Normalise input data between -1 and 1
-
 				for (let p = 0; p < inputImageData.image.length; p++) {
 					inputImageData.image[p] = (inputImageData.image[p] * 2) - 255;
 				}
-
 			}
 
 			let guess = net.predict(inputImageData);
-
 			let targetResult = new Array(classCount).fill(0);
 
 			/*if (presets.activation[0] == "tanh" || presets.activation[0] == "leakyrelu" || presets.activation[0] == "sin") {
@@ -820,13 +693,11 @@ function checkToTrain() {
 			net.train(inputImageData, targetResult);
 
 			totalAttempts++;
-
 		}
 
 		isTraining = false;
 
 		document.getElementById("imagesUsed").innerText = trainingIndex + " / " + totalImageCount;
-
 		document.getElementById("trainingProgress").value = 0;
 
 		let accuracy = (successfulAttempts / totalAttempts) * 100;
@@ -836,21 +707,16 @@ function checkToTrain() {
 		document.getElementById("trainButton").innerText = "Train";
 		document.getElementById("trainButton").style.background = "rgba(150, 240, 150, 1.0)";
 		document.getElementById("trainButton").style.pointerEvents = "all";
-
 	}
-
 }
 
 function shuffleArray(inputArray) {
 
 	let unshuffledArray = inputArray;
-
 	let randomRepeatTimes = unshuffledArray.length * 2;
 
 	for (let i = 0; i < randomRepeatTimes; i++) {
-
 		// Swap 2 random items in the array
-
 		let item1Pos = Math.round(Math.random() * (unshuffledArray.length - 1));
 		let item2Pos = Math.round(Math.random() * (unshuffledArray.length - 1));
 
@@ -859,7 +725,6 @@ function shuffleArray(inputArray) {
 
 		unshuffledArray[item1Pos] = item2;
 		unshuffledArray[item2Pos] = item1;
-
 	}
 
 	return unshuffledArray;
@@ -867,7 +732,6 @@ function shuffleArray(inputArray) {
 
 
 function addToConsole(text) {
-
 	let childText = document.createElement("p");
 	childText.innerText = text;
 	document.getElementById("consoleText").appendChild(childText);
@@ -876,30 +740,22 @@ function addToConsole(text) {
 		top: 600,
 		behavior: 'smooth'
 	});
-
 }
 
 
 // Save and load functions
-
 document.getElementById("save").addEventListener("click", e => {
 
 	let neuronDNA = net.getDNA();
-
 	neuronDNA.class = [document.getElementById("type1").value, document.getElementById("type2").value];
-
 	neuronDNA.name = prompt("Save Name:");
-
 	neuronDNA = JSON.stringify(neuronDNA);
 
 	copyToClipboard(neuronDNA);
-
 	alert("Copied to clipboard");
-
 });
 
 function copyToClipboard(str) {
-
 	if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
 		return navigator.clipboard.writeText(str);
 	}
@@ -908,19 +764,14 @@ function copyToClipboard(str) {
 }
 
 document.getElementById("load").addEventListener("click", e => {
-
+	
 	navigator.clipboard.readText()
 		.then(text => {
-
 			loadNetwork(JSON.parse(text));
-
 		})
 		.catch(err => {
-
 			alert('Failed to read clipboard contents: ' + err);
-
 		});
-
 });
 
 function loadNetwork(loadedNetwork) {
@@ -942,14 +793,11 @@ function loadNetwork(loadedNetwork) {
 
 	document.getElementById("type1").value = loadedNetwork.class[0];
 	document.getElementById("type2").value = loadedNetwork.class[1];
-
 }
 
 
 document.getElementById("autoShoot").addEventListener("click", e => {
-
 	toggleAutoShoot(!autoShootEnabled);
-
 })
 
 function toggleAutoShoot(isEnabled) {
@@ -967,13 +815,10 @@ function toggleAutoShoot(isEnabled) {
 }
 
 function autoShoot() {
-
 	if (autoShootEnabled) {
 		// Take picture every frame
-
 		takeAndProcessImage();
 	}
-
 }
 
 const connectorCan = document.getElementById("connector");
@@ -1002,7 +847,6 @@ function drawConnectors() {
 	connectorCTX.stroke();
 
 	for (let i = 0; i < classCount; i++) {
-
 		let classBounding = document.getElementById("imageCount" + (i + 1)).parentElement.getBoundingClientRect();
 
 		let classX = classBounding.left + classBounding.width;
@@ -1019,7 +863,6 @@ function drawConnectors() {
 		connectorCTX.beginPath();
 		connectorCTX.arc(classX, classY, 10, 0, 2 * Math.PI);
 		connectorCTX.stroke();
-
 	}
 
 	connectorCTX.beginPath();
@@ -1042,12 +885,10 @@ function drawConnectors() {
 	connectorCTX.moveTo(consoleX - 10, consoleY);
 	connectorCTX.lineTo(trainX + trainBounding.width + 30, trainY);
 	connectorCTX.stroke();
-
 }
 
 
 // Warning functions
-
 function resetWarning() {
 	document.getElementById("warning").style.opacity = 0;
 	document.getElementById("warning").style["pointer-events"] = "none";
@@ -1058,7 +899,6 @@ function resetWarning() {
 }
 
 function addWarningText(title, text) {
-
 	document.getElementById("warningTitle").innerText = title;
 	document.getElementById("warningText").innerText = text;
 
@@ -1069,22 +909,16 @@ function addWarningText(title, text) {
 
 	document.getElementById("warning").style.opacity = 1;
 	document.getElementById("warning").style["pointer-events"] = "all";
-
 }
 
 document.getElementById("warningClose").addEventListener("click", e => {
-
 	resetWarning();
-
 })
 
 resetWarning();
-
 addWarningText("Welcome To [Insert name here]!", "Simply rename or add new classes, add some training images with the plus button and hit train to play around with your new neural network!")
 
-
 function takeGuess() {
-
 	let capturedImage = takePicture(2);
 
 	let inputImageData = capturedImage;
@@ -1113,35 +947,24 @@ function takeGuess() {
 	let totalOutputs = 0;
 
 	for (let g = 0; g < classCount; g++) {
-
 		document.getElementById("guess" + (g + 1)).innerText = document.getElementById("type" + (g + 1)).value;
-
 		totalOutputs += guess[g];
-
 	}
 
 	totalOutputs = Math.max(totalOutputs, 1);
 
 	for (let g = 0; g < classCount; g++) {
-
 		document.getElementById("guess" + (g + 1) + "Progress").value = (guess[g] / totalOutputs) * 100;
-
 	}
 
 }
 
 function tick(t) {
-
 	takeGuess();
-
 	autoShoot();
-
 	checkToTrain();
-
 	drawConnectors();
-
 	autoScrollImageDisplay(t)
-
 	requestAnimationFrame(tick);
 }
 
