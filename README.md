@@ -28,27 +28,49 @@
 
 <br>
 
-# image_classfier
+# Image Classifier
 
 Create your own classes and training data to train a neural network to classify inputted images
 
 ## Setup
 
-Once you have downloaded the repository you will need to unzip the [starter network folder](/startNetworkFolder.zip) in the main directory and then move the file called startNetwork.JSON out of the unzipped folder and into the main directory so that the program can properly load up the starting weights and biases of the initail untrained network (this improves train time and success for other applications)
+You can simply use the [website that is hosted on github pages](https://gamedev46.github.io/Image_Classifier/) to use the program in your browser without needing to download and run the project on your device. 
 
-Alternatively you can simply use the [website that is hosted on github](https://gamedev46.github.io/Image_Classifier/), however this unfortunately doesn't have a starting model and so will perform qorse than the downloaded version
-
+Alternatively, you can also download the repository and run it locally for the same results.
 
 ## Controls
 
 ### Classes
 
-Classes represent different images for the network to classify, for example to classify whether a there is a person in the picture or not you would rename class 1 to person and then use the plus button to take pictures where a human is present and then for class 2 you would rename it to no human and then either upload or photograph pictures without people in and then click the train button to start the training of the network. Once trained you can then see the how successful the network was and try it out in realtime with your camera
+Classes represent a collection of data all following a certain theme, for example a collection of images of people holding their hand up or a collection of images of a specific object.
 
-### Learning Rate
+These classes each represent a choice that the neural network can predict when given an image to process.
+
+#### Adding Data
+
+You have 2 options to add the images to a class, you can either upload a folder containg multiple images for the class or you can create the data live using the camera support.
+
+#### Using The Camera
+
+The camera has 4 buttons for capturing data:
+
+- The first one (camera icon) is used to capture a single image of what is currently being viewed by the camera. 
+- The second button (button with the circular arrow icon) is used to switch between the front and back camera, if your devie does not have one of these then the button will do nothing
+- The pause button, this will pause / play the capturing of data when record mode is activated
+- The "record" button, this is a toggle and while it is active it will capture and save images of the video as you record live helping to get lots of data quickly
+
+#### Add Class
+
+The "Add Class" button will add a new class for the neural network to learn, please be aware that the more classes you add the harder time the network will have at correctly classifying items.
+
+### Training
+
+Now that you have captured your data, you now need to train the network on it. Simply press the "Train" button and wait for the network to be trained on all your captured data. Once this is done you can test it live with your camera and see the results shown by the likelihood bars in the "Prediction" tab.
+
+#### Learning Rate
 
 Learning rate controls the size of the steps taken during gradient descent, for those who are unsure I would reccomend a value of 0.05 to 0.2
 
-### Network Activation Function
+#### Network Activation Function
 
 The dropdown determines the network activation functions, this can either help or inhibit your network during the training process and if you are unexperienced I would reccomend leaving this value untouched as the default setting of "sigmoid" yields the best results in most cases
