@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
+
+	<title>Image Identification V3.5</title>
+
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+	<canvas id="connector" class="connector"></canvas>
+
+	<div>
+		<div class="videoOptions" id="videoOptions">
+
+			<div id="classHolder">
+
+				<div class="trainingClass">
+					<input type="text" id="type1" value="Class 1">
+					<div></div>
+					<h2 id="imageCount1">0 images</h2>
+					<div class="inlineShadow">
+						<button id="openCamera1"><i data-feather="plus-square"></i></button>
+						<label>
+							<i data-feather="file-plus"></i>
+							<input type="file" id="uploadFolder1" accept="image/*" webkitdirectory directory multiple>
+						</label>
+					</div>
+
+					<div class="inlineShadow" id="imageDisplay1">
+
+					</div>
+
+				</div>
+
+				<div class="trainingClass">
+					<input type="text" id="type2" value="Class 2">
+					<div></div>
+					<h2 id="imageCount2">0 images</h2>
+
+					<div class="inlineShadow">
+						<button id="openCamera2"><i data-feather="plus-square"></i></button>
+						<label>
+							<i data-feather="file-plus"></i>
+							<input type="file" id="uploadFolder2" accept="image/*" webkitdirectory directory multiple>
+						</label>
+
+					</div>
+
+					<div class="inlineShadow" id="imageDisplay2">
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<button class="addClass" id="addClass">Add Class</button>
+
+		</div>
+
+		<div class="rightPanel">
+
+			<div class="canvasHolder" id="canvasHolder">
+
+				<div class="inlineShadow">
+					<button id="trainButton">Train</button>
+				</div>
+
+				<div class="inlineShadow">
+					<select id="activationSelect">
+						<option value="sigmoid" selected>Sigmoid</option>
+						<option value="tanh">Tanh</option>
+						<option value="relu">Relu</option>
+						<option value="leakyrelu">Leaky Relu</option>
+						<option value="sin">Sin</option>
+					</select>
+				</div>
+
+				<div class="inlineShadow">
+					<p>Learning Rate:</p>
+					<input type="number" id="learningRate" value="0.2" step="0.05">
+				</div>
+
+				<div class="inlineShadow">
+					<progress id="trainingProgress" value="0" max="100"></progress>
+				</div>
+
+				<h2 id="imagesUsed">0 / 0</h2>
+
+				<canvas id="filterCanvas"></canvas>
+			</div>
+
+		</div>
+
+		<div class="console" id="console">
+
+			<div class="settings">
+				<div class="inlineShadow">
+					<button id="toggleMode"><i data-feather="sun"></i></button>
+				</div>
+			</div>
+
+			<div class="guess">
+				<p>Prediction:</p>
+
+				<div id="resultHolder">
+
+					<div class="percentageHolder">
+
+						<p id="guess1">N/A</p>
+						<progress id="guess1Progress" value="0" max="100"></progress>
+
+					</div>
+
+					<div class="percentageHolder">
+
+						<p id="guess2">N/A</p>
+						<progress id="guess2Progress" value="0" max="100"></progress>
+
+					</div>
+
+				</div>
+
+				<br>
+
+				<div class="inlineShadow">
+					<button id="save">Save</button>
+					<button id="load">Load</button>
+				</div>
+
+				<div class="inlineShadow">
+					<button id="resetNet">Reset Network</button>
+				</div>
+
+				<div class="inlineShadow">
+					<video id="cameraVideo2"></video>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="console">
+
+			<p>Console:</p>
+			<div id="consoleText">
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="videoHolder" id="videoHolder">
+
+		<video id="cameraVideo"></video>
+
+		<div class="inlineShadow">
+
+			<button id="captureButton"><i data-feather="camera"></i></button>
+			<button id="flipCamera"><i data-feather="rotate-cw"></i></button>
+			<button id="pausePlay"><i data-feather="pause"></i></button>
+			<button id="autoShoot">Record</button>
+
+		</div>
+
+	</div>
+
+	<div class="warning" id="warning">
+		<button id="warningClose"><i data-feather="x"></i></button>
+
+		<h1 id="warningTitle">Title</h1>
+		<p id="warningText">Body Text</p>
+
+	</div>
+
+	<canvas id="canvas"></canvas>
+
+	<script src="script.js" type="module"></script>
+
+	<script src="https://unpkg.com/feather-icons"></script>
+
+	<script>
+		feather.replace();
+	</script>
+
+</body>
+
+</html>
